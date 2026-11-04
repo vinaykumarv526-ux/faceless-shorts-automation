@@ -1,0 +1,32 @@
+{
+  "next_index": 3,
+  "scheduled_slots": {
+    "2026-11-04_slot3": {
+      "topic_id": "t01",
+      "title": "What Happens If You Hold in a Sneeze?",
+      "style": "deep-dive",
+      "publish_at": "2026-11-04T23:00:00Z",
+      "youtube_id": "Dx1xMz3bXHE",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-04T20:57:20.874303+00:00"
+    },
+    "2026-11-05_slot1": {
+      "topic_id": "t02",
+      "title": "What Happens If You Drink 5 Energy Drinks?",
+      "style": "inside-out",
+      "publish_at": "2026-11-05T13:30:00Z",
+      "youtube_id": "5XaICg2hiZo",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-04T20:58:07.844751+00:00"
+    },
+    "2026-11-05_slot2": {
+      "topic_id": "t03",
+      "title": "The Ghost Ship Found With Hot Food on the Table",
+      "style": "night-file",
+      "publish_at": "2026-11-05T18:00:00Z",
+      "youtube_id": "3aw2EnFWJrk",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-04T22:36:22.248566+00:00"
+    }
+  }
+}
