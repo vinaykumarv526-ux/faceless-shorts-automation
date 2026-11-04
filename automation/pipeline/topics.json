@@ -1,11 +1,11 @@
 {
-  "styles": ["deep-dive", "night-file", "inside-out", "stick-story", "paper-atlas", "tall-tale"],
+  "styles": ["deep-dive", "inside-out", "night-file", "stick-story", "paper-atlas", "tall-tale"],
   "topics": [
     {
       "id": "t01",
       "style": "deep-dive",
       "title": "What Happens If You Hold in a Sneeze?",
-      "hook": "You feel a sneeze coming, but you pinch your nose and hold it in. What actually happens?",
+      "hook": "You feel a sneeze coming, but you pinch your nose and hold it in. What actually happens to your body?",
       "niche": "human_body",
       "tags": ["shorts", "science", "bodyfacts", "whathappensif", "biology", "health"]
     },
@@ -13,14 +13,14 @@
       "id": "t02",
       "style": "inside-out",
       "title": "What Happens If You Drink 5 Energy Drinks?",
-      "hook": "Ever wondered what happens to your heart if you chug five energy drinks back to back?",
+      "hook": "Ever wondered what happens to your heart and nervous system if you chug five energy drinks back to back?",
       "niche": "human_body",
       "tags": ["shorts", "health", "energydrinks", "medicalfacts", "didyouknow"]
     },
     {
       "id": "t03",
       "style": "night-file",
-      "title": "The Ghost Ship Found With Food Still on the Table",
+      "title": "The Ghost Ship Found With Hot Food on the Table",
       "hook": "In 1872, sailors spotted the Mary Celeste drifting in the Atlantic. Not a soul was onboard.",
       "niche": "mystery",
       "tags": ["shorts", "mystery", "unsolved", "truecrime", "spooky", "history"]
@@ -29,7 +29,7 @@
       "id": "t04",
       "style": "stick-story",
       "title": "What To Do If Your Elevator Cable Snaps",
-      "hook": "You're on the 30th floor and the elevator cables suddenly snap. Jumping right before impact?",
+      "hook": "You're on the 50th floor and the elevator cable suddenly snaps. Jumping right before impact?",
       "niche": "survival",
       "tags": ["shorts", "survival", "lifesaving", "whatwouldyoudo", "tips", "hacks"]
     },
@@ -61,7 +61,7 @@
       "id": "t08",
       "style": "inside-out",
       "title": "What Happens If You Swallow a Fish Bone?",
-      "hook": "You're eating fish and suddenly a tiny, sharp bone slides down your throat.",
+      "hook": "You're eating fish and suddenly a tiny, razor-sharp bone slides down your throat.",
       "niche": "human_body",
       "tags": ["shorts", "medicalfacts", "fishbone", "anatomy", "emergency"]
     },
@@ -76,10 +76,74 @@
     {
       "id": "t10",
       "style": "stick-story",
-      "title": "How To Escape a Rip Current",
-      "hook": "You're swimming in the ocean, and within seconds the tide pulls you hundreds of feet out.",
+      "title": "How To Escape a Deadly Rip Current",
+      "hook": "You're swimming at the beach, and within seconds an invisible current pulls you hundreds of yards out.",
       "niche": "survival",
       "tags": ["shorts", "survival", "ripcurrent", "oceansafety", "lifesaving"]
+    },
+    {
+      "id": "t11",
+      "style": "paper-atlas",
+      "title": "The Great Boston Molasses Flood of 1919",
+      "hook": "A 50-foot steel tank suddenly burst, unleashing a 35-mile-per-hour tsunami of deadly hot molasses.",
+      "niche": "history",
+      "tags": ["shorts", "history", "boston", "weirdhistory", "disaster"]
+    },
+    {
+      "id": "t12",
+      "style": "tall-tale",
+      "title": "The Fake Doctor Who Performed Surgery on a Warship",
+      "hook": "Ferdinand Waldo Demara faked his credentials, became a naval surgeon, and successfully performed surgeries on 19 wounded soldiers.",
+      "niche": "true_story",
+      "tags": ["shorts", "truestory", "impostor", "crazyfacts", "naval"]
+    },
+    {
+      "id": "t13",
+      "style": "deep-dive",
+      "title": "What Happens If You Swallow a Button Battery?",
+      "hook": "If a child swallows a shiny coin battery, an invisible chemical burn starts in just two hours.",
+      "niche": "human_body",
+      "tags": ["shorts", "science", "battery", "emergency", "medicalfacts"]
+    },
+    {
+      "id": "t14",
+      "style": "inside-out",
+      "title": "Why Brain Freeze Actually Happens",
+      "hook": "You take a big bite of ice cream, and your skull instantly explodes in searing pain.",
+      "niche": "human_body",
+      "tags": ["shorts", "brainfreeze", "science", "medicalfacts", "biology"]
+    },
+    {
+      "id": "t15",
+      "style": "night-file",
+      "title": "The 200-Year-Old Booby-Trapped Money Pit",
+      "hook": "On Oak Island, treasure hunters found a mysterious shaft rigged with ancient flood tunnels that drown anyone who digs.",
+      "niche": "mystery",
+      "tags": ["shorts", "oakisland", "mystery", "treasure", "unsolved"]
+    },
+    {
+      "id": "t16",
+      "style": "stick-story",
+      "title": "What To Do If Quicksand Pulls You Down",
+      "hook": "You step into wet sand and immediately sink past your knees. Thrashing will pull you under faster.",
+      "niche": "survival",
+      "tags": ["shorts", "survival", "quicksand", "lifesaving", "tips"]
+    },
+    {
+      "id": "t17",
+      "style": "paper-atlas",
+      "title": "When Liechtenstein Went to War With 80 Men and Returned With 81",
+      "hook": "In 1866, the tiny nation of Liechtenstein sent 80 soldiers to guard an Italian border pass. They suffered zero casualties and made a new friend.",
+      "niche": "history",
+      "tags": ["shorts", "history", "wholesome", "weirdhistory", "europe"]
+    },
+    {
+      "id": "t18",
+      "style": "tall-tale",
+      "title": "The Guy Who Paid His Parking Ticket With 1.4M Miles From Pudding",
+      "hook": "David Phillips found a supermarket loophole: buy Healthy Choice chocolate pudding cups and get 1,250,000 frequent flyer airline miles for life.",
+      "niche": "true_story",
+      "tags": ["shorts", "loophole", "truestory", "travelhacks", "genius"]
     }
   ]
 }

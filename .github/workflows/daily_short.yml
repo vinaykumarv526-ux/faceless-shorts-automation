@@ -1,16 +1,16 @@
-name: Daily Faceless Short Auto-Publisher
+name: 24-7 Buffer Auto-Publisher (3 Videos/Day - US Peak Hours)
 
 on:
   schedule:
-    # Runs every day at 15:00 UTC (10:00 AM EST / 7:00 AM PST) - Peak US hours
-    - cron: '0 15 * * *'
+    # Runs every 8 hours to verify and maintain the 2-day buffer queue
+    - cron: '0 */8 * * *'
   workflow_dispatch: # Allows 1-click manual trigger anytime
 
 permissions:
   contents: write
 
 jobs:
-  build-and-publish:
+  schedule-buffer:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -44,7 +44,7 @@ jobs:
           python faceless-shorts/scripts/voice.py --download
           python -c "from faster_whisper import WhisperModel; WhisperModel('small.en', device='cpu', compute_type='int8')"
 
-      - name: Generate Short and Publish
+      - name: Check and Maintain 2-Day Schedule Buffer
         env:
           YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
@@ -53,12 +53,12 @@ jobs:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
         run: |
           export PYTHONPATH="faceless-shorts/scripts:automation/pipeline:$PYTHONPATH"
-          python automation/pipeline/generate_and_publish.py
+          python automation/pipeline/buffer_scheduler.py
 
-      - name: Commit state progression
+      - name: Commit Schedule Buffer State
         run: |
-          git config user.name "Shorts Automation Bot"
+          git config user.name "Buffer Automation Bot"
           git config user.email "bot@users.noreply.github.com"
-          git add automation/pipeline/state.json
-          git commit -m "chore: advance topic queue [skip ci]" || echo "No state changes to commit"
+          git add automation/pipeline/state.json automation/pipeline/topics.json
+          git commit -m "chore: update 2-day buffer queue [skip ci]" || echo "No state changes to commit"
           git push
