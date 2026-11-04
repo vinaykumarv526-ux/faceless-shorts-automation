@@ -1,0 +1,85 @@
+{
+  "styles": ["deep-dive", "night-file", "inside-out", "stick-story", "paper-atlas", "tall-tale"],
+  "topics": [
+    {
+      "id": "t01",
+      "style": "deep-dive",
+      "title": "What Happens If You Hold in a Sneeze?",
+      "hook": "You feel a sneeze coming, but you pinch your nose and hold it in. What actually happens?",
+      "niche": "human_body",
+      "tags": ["shorts", "science", "bodyfacts", "whathappensif", "biology", "health"]
+    },
+    {
+      "id": "t02",
+      "style": "inside-out",
+      "title": "What Happens If You Drink 5 Energy Drinks?",
+      "hook": "Ever wondered what happens to your heart if you chug five energy drinks back to back?",
+      "niche": "human_body",
+      "tags": ["shorts", "health", "energydrinks", "medicalfacts", "didyouknow"]
+    },
+    {
+      "id": "t03",
+      "style": "night-file",
+      "title": "The Ghost Ship Found With Food Still on the Table",
+      "hook": "In 1872, sailors spotted the Mary Celeste drifting in the Atlantic. Not a soul was onboard.",
+      "niche": "mystery",
+      "tags": ["shorts", "mystery", "unsolved", "truecrime", "spooky", "history"]
+    },
+    {
+      "id": "t04",
+      "style": "stick-story",
+      "title": "What To Do If Your Elevator Cable Snaps",
+      "hook": "You're on the 30th floor and the elevator cables suddenly snap. Jumping right before impact?",
+      "niche": "survival",
+      "tags": ["shorts", "survival", "lifesaving", "whatwouldyoudo", "tips", "hacks"]
+    },
+    {
+      "id": "t05",
+      "style": "paper-atlas",
+      "title": "How One Pigeon Saved 194 American Soldiers",
+      "hook": "In 1918, a flock of American troops was trapped behind enemy lines under friendly artillery fire.",
+      "niche": "history",
+      "tags": ["shorts", "history", "military", "warstories", "heroes", "maps"]
+    },
+    {
+      "id": "t06",
+      "style": "tall-tale",
+      "title": "The Man Who Sold the Eiffel Tower Twice",
+      "hook": "In 1925, a con artist named Victor Lustig convinced a scrap metal dealer that the Eiffel Tower was for sale.",
+      "niche": "true_story",
+      "tags": ["shorts", "truestory", "conartist", "heist", "funfacts", "history"]
+    },
+    {
+      "id": "t07",
+      "style": "deep-dive",
+      "title": "Why You Must Never Pop a Pimple Here",
+      "hook": "There is a zone on your face called the Danger Triangle. Popping a pimple here can kill you.",
+      "niche": "human_body",
+      "tags": ["shorts", "bodyfacts", "dangertriangle", "health", "science"]
+    },
+    {
+      "id": "t08",
+      "style": "inside-out",
+      "title": "What Happens If You Swallow a Fish Bone?",
+      "hook": "You're eating fish and suddenly a tiny, sharp bone slides down your throat.",
+      "niche": "human_body",
+      "tags": ["shorts", "medicalfacts", "fishbone", "anatomy", "emergency"]
+    },
+    {
+      "id": "t09",
+      "style": "night-file",
+      "title": "The Unsolved Mystery of Flight 19",
+      "hook": "Five US Navy torpedo bombers took off from Florida into clear blue skies and vanished without a trace.",
+      "niche": "mystery",
+      "tags": ["shorts", "bermudatriangle", "flight19", "mystery", "unsolved"]
+    },
+    {
+      "id": "t10",
+      "style": "stick-story",
+      "title": "How To Escape a Rip Current",
+      "hook": "You're swimming in the ocean, and within seconds the tide pulls you hundreds of feet out.",
+      "niche": "survival",
+      "tags": ["shorts", "survival", "ripcurrent", "oceansafety", "lifesaving"]
+    }
+  ]
+}

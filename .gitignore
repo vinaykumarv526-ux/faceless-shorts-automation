@@ -1,0 +1,22 @@
+# Python & Virtual Environments
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Secrets & Local credentials
+client_secret.json
+youtube_token.json
+*.pem
+*.key
+
+# Large Archives & Temp Output
+faceless-shorts-skill.zip
+runs/
+renders/*.mp4
+*.mp4
+review/
+test_sheet.jpg
+
+# Node
+node_modules/

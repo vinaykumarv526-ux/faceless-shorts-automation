@@ -1,0 +1,62 @@
+name: Daily Faceless Short Auto-Publisher
+
+on:
+  schedule:
+    # Runs every day at 15:00 UTC (10:00 AM EST / 7:00 AM PST) - Peak US hours
+    - cron: '0 15 * * *'
+  workflow_dispatch: # Allows 1-click manual trigger anytime
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install FFmpeg & Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg wget fonts-inter
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -fy install
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy scipy kokoro-onnx faster-whisper google-auth-oauthlib google-api-python-client requests
+
+      - name: Setup models (Kokoro TTS & Whisper)
+        run: |
+          bash faceless-shorts/scripts/setup.sh
+
+      - name: Generate Short and Publish
+        env:
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: |
+          export PYTHONPATH="faceless-shorts/scripts:automation/pipeline:$PYTHONPATH"
+          python automation/pipeline/generate_and_publish.py
+
+      - name: Commit state progression
+        run: |
+          git config user.name "Shorts Automation Bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add automation/pipeline/state.json
+          git commit -m "chore: advance topic queue [skip ci]" || echo "No state changes to commit"
+          git push
