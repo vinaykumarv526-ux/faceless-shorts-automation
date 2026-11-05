@@ -71,18 +71,37 @@ def build_short(topic, output_mp4):
         shutil.rmtree(proj_dir)
 
     shutil.copytree(example_dir, proj_dir)
-    print(f"Building {topic['title']} in {style} at {proj_dir}")
+    print(f"\n[BUILD] Building '{topic['title']}' using style '{style}' at {proj_dir}")
 
     py_bin = sys.executable
+    voice_py = SKILL_DIR / "scripts" / "voice.py"
+    words_py = SKILL_DIR / "scripts" / "words.py"
+
+    # Step 1: Synthesize real AI voice with Kokoro
+    print("1. Synthesizing voiceover with Kokoro (am_michael)...")
+    run_cmd([py_bin, str(voice_py), "."], cwd=proj_dir)
+
+    # Step 2: Compute word timings with Whisper
+    print("2. Computing word-level timing cues with Whisper...")
+    run_cmd([py_bin, str(words_py), "."], cwd=proj_dir)
+
+    # Step 3: Extract scene cues & verify timeline
+    print("3. Checking timeline and cues...")
     run_cmd(["node", "tools/capture.mjs", "check"], cwd=proj_dir)
     run_cmd(["node", "tools/capture.mjs", "cues"], cwd=proj_dir)
+
+    # Step 4: Mix voice + background music + sound effects
+    print("4. Mixing soundtrack (voice + music ducking + sound effects)...")
     run_cmd([py_bin, str(proj_dir / "tools" / "mix.py"), "."], cwd=proj_dir)
 
+    # Step 5: Render video via Headless Chrome with audio merged
     output_mp4.parent.mkdir(parents=True, exist_ok=True)
-    run_cmd(["node", "tools/capture.mjs", "video", str(output_mp4)], cwd=proj_dir)
-    print(f"Rendered short: {output_mp4} ({output_mp4.stat().st_size} bytes)")
+    print("5. Rendering final MP4 via Chrome and FFmpeg (optimized fast preset)...")
+    # Using --draft flag renders crisp 30fps video in 2-4 minutes instead of 1 hour
+    run_cmd(["node", "tools/capture.mjs", "video", str(output_mp4), "--draft"], cwd=proj_dir)
+    print(f"SUCCESS: Rendered video with voice: {output_mp4} ({output_mp4.stat().st_size} bytes)")
 
-def maintain_schedule_buffer(max_to_schedule=3):
+def maintain_schedule_buffer(max_to_schedule=1):
     topics_file = PIPELINE_DIR / "topics.json"
     state_file = PIPELINE_DIR / "state.json"
 
@@ -120,7 +139,7 @@ def maintain_schedule_buffer(max_to_schedule=3):
     from uploader import upload_to_youtube, upload_to_facebook_reel
 
     slots_to_process = unfilled_slots[:max_to_schedule]
-    print(f"Filling {len(slots_to_process)} missing slot(s) in forward buffer...")
+    print(f"Scheduling {len(slots_to_process)} slot(s) in this runner pass...")
 
     for slot in slots_to_process:
         topic = topics[next_idx % len(topics)]
@@ -163,7 +182,8 @@ def maintain_schedule_buffer(max_to_schedule=3):
         with open(state_file, "w") as f:
             json.dump(state, f, indent=2)
 
-    print("\nBuffer maintenance complete. State updated.")
+    print("\nBuffer maintenance pass complete. State updated.")
 
 if __name__ == "__main__":
-    maintain_schedule_buffer(max_to_schedule=3)
+    count = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    maintain_schedule_buffer(max_to_schedule=count)

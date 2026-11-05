@@ -2,9 +2,14 @@ name: 24-7 Buffer Auto-Publisher (3 Videos/Day - US Peak Hours)
 
 on:
   schedule:
-    # Runs every 8 hours to verify and maintain the 2-day buffer queue
-    - cron: '0 */8 * * *'
+    # Runs every 2 hours to maintain the rolling 2-day buffer queue
+    - cron: '0 */2 * * *'
   workflow_dispatch: # Allows 1-click manual trigger anytime
+    inputs:
+      videos_to_build:
+        description: 'Number of videos to generate and schedule in this run'
+        required: false
+        default: '1'
 
 permissions:
   contents: write
@@ -53,7 +58,8 @@ jobs:
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
         run: |
           export PYTHONPATH="faceless-shorts/scripts:automation/pipeline:$PYTHONPATH"
-          python automation/pipeline/buffer_scheduler.py
+          COUNT="${{ github.event.inputs.videos_to_build || '1' }}"
+          python automation/pipeline/buffer_scheduler.py "$COUNT"
 
       - name: Commit Schedule Buffer State
         run: |
