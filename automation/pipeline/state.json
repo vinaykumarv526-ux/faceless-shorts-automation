@@ -1,5 +1,5 @@
 {
-  "next_index": 7,
+  "next_index": 8,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -63,6 +63,15 @@
       "youtube_id": "1AS6KEUYibs",
       "facebook_id": null,
       "scheduled_at": "2026-11-05T23:52:34.166456+00:00"
+    },
+    "2026-11-07_slot1": {
+      "topic_id": "t08",
+      "title": "What Happens If You Swallow a Fish Bone?",
+      "style": "inside-out",
+      "publish_at": "2026-11-07T15:00:00Z",
+      "youtube_id": "n-0KV8EJHpE",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-06T04:29:46.882631+00:00"
     }
   }
 }
