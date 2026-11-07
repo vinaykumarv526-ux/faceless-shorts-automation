@@ -1,5 +1,5 @@
 {
-  "next_index": 10,
+  "next_index": 11,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -90,6 +90,15 @@
       "youtube_id": "ABedF5UeOoY",
       "facebook_id": null,
       "scheduled_at": "2026-11-06T20:16:10.060622+00:00"
+    },
+    "2026-11-08_slot1": {
+      "topic_id": "t11",
+      "title": "The Great Boston Molasses Flood of 1919",
+      "style": "paper-atlas",
+      "publish_at": "2026-11-08T15:00:00Z",
+      "youtube_id": "z57K6eRHlNY",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-07T01:31:02.659759+00:00"
     }
   }
 }
