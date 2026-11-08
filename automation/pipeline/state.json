@@ -1,5 +1,5 @@
 {
-  "next_index": 15,
+  "next_index": 16,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -135,6 +135,15 @@
       "youtube_id": "vSy9rrz_MTg",
       "facebook_id": null,
       "scheduled_at": "2026-11-08T01:46:39.691350+00:00"
+    },
+    "2026-11-09_slot3": {
+      "topic_id": "t16",
+      "title": "What To Do If Quicksand Pulls You Down",
+      "style": "stick-story",
+      "publish_at": "2026-11-09T23:00:00Z",
+      "youtube_id": "4xcSwnu5vFg",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-08T08:27:27.969681+00:00"
     }
   }
 }
