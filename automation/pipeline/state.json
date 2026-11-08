@@ -1,5 +1,5 @@
 {
-  "next_index": 14,
+  "next_index": 15,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -126,6 +126,15 @@
       "youtube_id": "1Nmdlq8skVs",
       "facebook_id": null,
       "scheduled_at": "2026-11-07T20:02:28.457629+00:00"
+    },
+    "2026-11-09_slot2": {
+      "topic_id": "t15",
+      "title": "The 200-Year-Old Booby-Trapped Money Pit",
+      "style": "night-file",
+      "publish_at": "2026-11-09T18:00:00Z",
+      "youtube_id": "vSy9rrz_MTg",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-08T01:46:39.691350+00:00"
     }
   }
 }
