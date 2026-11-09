@@ -1,5 +1,5 @@
 {
-  "next_index": 19,
+  "next_index": 20,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -171,6 +171,15 @@
       "youtube_id": "PVPkkZXRwHw",
       "facebook_id": null,
       "scheduled_at": "2026-11-09T02:46:32.596416+00:00"
+    },
+    "2026-11-11_slot1": {
+      "topic_id": "t02",
+      "title": "What Happens If You Drink 5 Energy Drinks?",
+      "style": "inside-out",
+      "publish_at": "2026-11-11T13:30:00Z",
+      "youtube_id": "j_h14i2-olg",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-09T08:55:44.851357+00:00"
     }
   }
 }
