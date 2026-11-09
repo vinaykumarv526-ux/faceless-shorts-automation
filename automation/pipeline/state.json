@@ -1,5 +1,5 @@
 {
-  "next_index": 20,
+  "next_index": 21,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -180,6 +180,15 @@
       "youtube_id": "j_h14i2-olg",
       "facebook_id": null,
       "scheduled_at": "2026-11-09T08:55:44.851357+00:00"
+    },
+    "2026-11-11_slot2": {
+      "topic_id": "t03",
+      "title": "The Ghost Ship Found With Hot Food on the Table",
+      "style": "night-file",
+      "publish_at": "2026-11-11T18:00:00Z",
+      "youtube_id": "rnVkCVGsEqM",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-09T21:09:09.840124+00:00"
     }
   }
 }
