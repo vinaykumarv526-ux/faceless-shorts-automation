@@ -1,5 +1,5 @@
 {
-  "next_index": 23,
+  "next_index": 24,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -207,6 +207,15 @@
       "youtube_id": "d1gxMFQbKtA",
       "facebook_id": null,
       "scheduled_at": "2026-11-10T12:00:05.226790+00:00"
+    },
+    "2026-11-12_slot2": {
+      "topic_id": "t06",
+      "title": "The Man Who Sold the Eiffel Tower Twice",
+      "style": "tall-tale",
+      "publish_at": "2026-11-12T18:00:00Z",
+      "youtube_id": "oS635iHxbLg",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-10T20:41:21.534102+00:00"
     }
   }
 }
