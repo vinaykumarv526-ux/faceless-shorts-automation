@@ -1,5 +1,5 @@
 {
-  "next_index": 22,
+  "next_index": 23,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -198,6 +198,15 @@
       "youtube_id": "Ta-5Ep_TGHk",
       "facebook_id": null,
       "scheduled_at": "2026-11-10T03:57:51.446112+00:00"
+    },
+    "2026-11-12_slot1": {
+      "topic_id": "t05",
+      "title": "How One Pigeon Saved 194 American Soldiers",
+      "style": "paper-atlas",
+      "publish_at": "2026-11-12T13:30:00Z",
+      "youtube_id": "d1gxMFQbKtA",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-10T12:00:05.226790+00:00"
     }
   }
 }
