@@ -1,5 +1,5 @@
 {
-  "next_index": 24,
+  "next_index": 25,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -216,6 +216,15 @@
       "youtube_id": "oS635iHxbLg",
       "facebook_id": null,
       "scheduled_at": "2026-11-10T20:41:21.534102+00:00"
+    },
+    "2026-11-12_slot3": {
+      "topic_id": "t07",
+      "title": "Why You Must Never Pop a Pimple Here",
+      "style": "deep-dive",
+      "publish_at": "2026-11-12T23:00:00Z",
+      "youtube_id": "QuorEXcKx0o",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-11T01:47:15.005293+00:00"
     }
   }
 }
