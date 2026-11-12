@@ -1,5 +1,5 @@
 {
-  "next_index": 27,
+  "next_index": 28,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -243,6 +243,15 @@
       "youtube_id": "FpbmiB-1LrA",
       "facebook_id": null,
       "scheduled_at": "2026-11-12T06:33:25.388139+00:00"
+    },
+    "2026-11-13_slot3": {
+      "topic_id": "t10",
+      "title": "How To Escape a Deadly Rip Current",
+      "style": "stick-story",
+      "publish_at": "2026-11-13T23:00:00Z",
+      "youtube_id": "5i4g7-95x8k",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-12T14:26:09.092266+00:00"
     }
   }
 }
