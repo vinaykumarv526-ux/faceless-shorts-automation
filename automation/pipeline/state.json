@@ -1,5 +1,5 @@
 {
-  "next_index": 35,
+  "next_index": 36,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -315,6 +315,15 @@
       "youtube_id": "tIK8AXJ0OSs",
       "facebook_id": null,
       "scheduled_at": "2026-11-14T16:18:11.922600+00:00"
+    },
+    "2026-11-16_slot2": {
+      "topic_id": "t18",
+      "title": "The Guy Who Paid His Parking Ticket With 1.4M Miles From Pudding",
+      "style": "tall-tale",
+      "publish_at": "2026-11-16T18:00:00Z",
+      "youtube_id": "SbUfi0kzui8",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-14T23:38:30.551009+00:00"
     }
   }
 }
