@@ -1,5 +1,5 @@
 {
-  "next_index": 36,
+  "next_index": 37,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -324,6 +324,15 @@
       "youtube_id": "SbUfi0kzui8",
       "facebook_id": null,
       "scheduled_at": "2026-11-14T23:38:30.551009+00:00"
+    },
+    "2026-11-16_slot3": {
+      "topic_id": "t01",
+      "title": "What Happens If You Hold in a Sneeze?",
+      "style": "deep-dive",
+      "publish_at": "2026-11-16T23:00:00Z",
+      "youtube_id": "6FKzXOi_kbU",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-15T02:53:52.413587+00:00"
     }
   }
 }
