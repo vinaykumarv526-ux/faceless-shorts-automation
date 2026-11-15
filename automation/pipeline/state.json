@@ -1,5 +1,5 @@
 {
-  "next_index": 39,
+  "next_index": 40,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -351,6 +351,15 @@
       "youtube_id": "_Ti1rPSULrE",
       "facebook_id": null,
       "scheduled_at": "2026-11-15T18:11:20.338961+00:00"
+    },
+    "2026-11-17_slot3": {
+      "topic_id": "t04",
+      "title": "What To Do If Your Elevator Cable Snaps",
+      "style": "stick-story",
+      "publish_at": "2026-11-17T23:00:00Z",
+      "youtube_id": "smE7LN2f0BM",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-15T22:24:44.476195+00:00"
     }
   }
 }
