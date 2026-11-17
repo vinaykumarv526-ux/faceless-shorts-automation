@@ -1,5 +1,5 @@
 {
-  "next_index": 44,
+  "next_index": 45,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -396,6 +396,15 @@
       "youtube_id": "REjUMV-fSYQ",
       "facebook_id": null,
       "scheduled_at": "2026-11-17T06:00:46.059030+00:00"
+    },
+    "2026-11-19_slot2": {
+      "topic_id": "t09",
+      "title": "The Unsolved Mystery of Flight 19",
+      "style": "night-file",
+      "publish_at": "2026-11-19T18:00:00Z",
+      "youtube_id": "8sal-gwr5HM",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-17T16:49:11.681695+00:00"
     }
   }
 }
