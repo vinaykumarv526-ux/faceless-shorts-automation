@@ -1,5 +1,5 @@
 {
-  "next_index": 47,
+  "next_index": 48,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -423,6 +423,15 @@
       "youtube_id": "iheFfoX76_E",
       "facebook_id": null,
       "scheduled_at": "2026-11-18T05:22:53.680327+00:00"
+    },
+    "2026-11-20_slot2": {
+      "topic_id": "t12",
+      "title": "The Fake Doctor Who Performed Surgery on a Warship",
+      "style": "tall-tale",
+      "publish_at": "2026-11-20T18:00:00Z",
+      "youtube_id": "jpgatgbIkFY",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-18T17:09:32.405068+00:00"
     }
   }
 }
