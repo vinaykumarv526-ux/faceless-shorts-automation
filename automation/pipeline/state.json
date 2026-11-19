@@ -1,5 +1,5 @@
 {
-  "next_index": 48,
+  "next_index": 49,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -432,6 +432,15 @@
       "youtube_id": "jpgatgbIkFY",
       "facebook_id": null,
       "scheduled_at": "2026-11-18T17:09:32.405068+00:00"
+    },
+    "2026-11-20_slot3": {
+      "topic_id": "t13",
+      "title": "What Happens If You Swallow a Button Battery?",
+      "style": "deep-dive",
+      "publish_at": "2026-11-20T23:00:00Z",
+      "youtube_id": "1QKW9GTU450",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-19T00:14:22.531803+00:00"
     }
   }
 }
