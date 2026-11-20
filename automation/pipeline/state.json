@@ -1,5 +1,5 @@
 {
-  "next_index": 49,
+  "next_index": 50,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -441,6 +441,15 @@
       "youtube_id": "1QKW9GTU450",
       "facebook_id": null,
       "scheduled_at": "2026-11-19T00:14:22.531803+00:00"
+    },
+    "2026-11-21_slot1": {
+      "topic_id": "t14",
+      "title": "Why Brain Freeze Actually Happens",
+      "style": "inside-out",
+      "publish_at": "2026-11-21T15:00:00Z",
+      "youtube_id": "lUU_VOPQg-M",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-20T12:02:39.854289+00:00"
     }
   }
 }
