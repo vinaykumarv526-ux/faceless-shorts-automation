@@ -1,5 +1,5 @@
 {
-  "next_index": 52,
+  "next_index": 53,
   "scheduled_slots": {
     "2026-11-04_slot3": {
       "topic_id": "t01",
@@ -468,6 +468,15 @@
       "youtube_id": "Bsid8Oerhlg",
       "facebook_id": null,
       "scheduled_at": "2026-11-20T22:32:12.104768+00:00"
+    },
+    "2026-11-22_slot1": {
+      "topic_id": "t17",
+      "title": "When Liechtenstein Went to War With 80 Men and Returned With 81",
+      "style": "paper-atlas",
+      "publish_at": "2026-11-22T15:00:00Z",
+      "youtube_id": "fZS9JG-09g8",
+      "facebook_id": null,
+      "scheduled_at": "2026-11-21T05:00:04.110143+00:00"
     }
   }
 }
