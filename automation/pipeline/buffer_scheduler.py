@@ -53,14 +53,39 @@ def get_target_slots(now_utc=None):
     return slots
 
 def build_short(topic, output_mp4):
-    proj_dir = ROOT / "runs" / f"run_{topic['id']}"
+    slot_id = output_mp4.stem
+    proj_dir = ROOT / "runs" / f"run_{slot_id}"
 
     if proj_dir.exists():
         shutil.rmtree(proj_dir)
 
-    # Use the new 9-Cut Architectural Retention Loop Model
-    shutil.copytree(MODEL_DIR, proj_dir)
+    # Use the 9-Cut Architectural Retention Loop Model as base
+    shutil.copytree(MODEL_DIR, proj_dir, ignore=shutil.ignore_patterns('renders', 'review', '*.mp4', 'automated_thumbnail.jpg'))
     print(f"\n[BUILD] Building '{topic['title']}' using 9-Cut Architectural Model at {proj_dir}")
+
+    # Inject topic's dedicated script and blueprint into script.json
+    script_data = topic.get("script")
+    if not script_data:
+        # Fallback to model's base script if topic didn't specify one
+        with open(MODEL_DIR / "script.json", encoding="utf-8") as f:
+            script_data = json.load(f)
+        script_data["title"] = topic["title"]
+
+    if "blueprint" in topic:
+        script_data["blueprint"] = topic["blueprint"]
+
+    # Write fresh script.json
+    with open(proj_dir / "script.json", "w", encoding="utf-8") as f:
+        json.dump(script_data, f, indent=2)
+
+    # Clean old audio artifacts to guarantee 100% fresh synthesis
+    for stale in ["data/voice.wav", "data/narration.wav", "data/lines.json", "data/words.json", "data/words.txt", "data/cues.json", "data/mix.wav"]:
+        p = proj_dir / stale
+        if p.exists():
+            try:
+                p.unlink()
+            except Exception:
+                pass
 
     py_bin = sys.executable
     voice_py = SKILL_DIR / "scripts" / "voice.py"
@@ -95,11 +120,13 @@ def maintain_schedule_buffer(max_to_schedule=1):
 
     with open(topics_file) as f:
         topics_data = json.load(f)
-    topics = topics_data["topics"]
+    topics = topics_data.get("topics", [])
 
     state = {
         "next_index": 0,
-        "scheduled_slots": {}
+        "scheduled_slots": {},
+        "used_topic_ids": [],
+        "used_titles": []
     }
     if state_file.exists():
         try:
@@ -109,7 +136,18 @@ def maintain_schedule_buffer(max_to_schedule=1):
             pass
 
     scheduled_slots = state.get("scheduled_slots", {})
-    next_idx = state.get("next_index", 0)
+    used_topic_ids = set(state.get("used_topic_ids", []))
+    used_titles = set(state.get("used_titles", []))
+
+    # Synchronize used topics from all previously recorded slots
+    for s_info in scheduled_slots.values():
+        if "topic_id" in s_info:
+            used_topic_ids.add(s_info["topic_id"])
+        if "title" in s_info:
+            used_titles.add(s_info["title"].lower().strip())
+
+    state["used_topic_ids"] = list(used_topic_ids)
+    state["used_titles"] = list(used_titles)
 
     target_slots = get_target_slots()
     print(f"\n==========================================")
@@ -126,16 +164,23 @@ def maintain_schedule_buffer(max_to_schedule=1):
 
     from uploader import upload_to_youtube, upload_to_facebook_reel
     from thumb_generator import generate_thumbnail
+    from fresh_topics import get_next_fresh_topic
 
     slots_to_process = unfilled_slots[:max_to_schedule]
-    print(f"Scheduling {len(slots_to_process)} slot(s) using Architectural Retention Loop...")
+    print(f"Scheduling {len(slots_to_process)} slot(s) using Architectural Retention Loop (Guaranteed Fresh Content)...")
 
     for slot in slots_to_process:
-        topic = topics[next_idx % len(topics)]
-        next_idx += 1
+        # Guarantee 100% fresh, non-repeated topic
+        topic = get_next_fresh_topic(state, topics)
+        
+        # Record usage immediately
+        used_topic_ids.add(topic["id"])
+        used_titles.add(topic["title"].lower().strip())
+        state["used_topic_ids"] = list(used_topic_ids)
+        state["used_titles"] = list(used_titles)
 
         print(f"\n--- Scheduling Slot: {slot['id']} ({slot['iso']}) ---")
-        print(f"Topic: {topic['title']}")
+        print(f"FRESH TOPIC: {topic['title']} (ID: {topic['id']})")
 
         video_file = ROOT / "renders" / f"{slot['id']}.mp4"
         thumb_file = ROOT / "renders" / f"{slot['id']}_thumb.jpg"
@@ -176,12 +221,11 @@ def maintain_schedule_buffer(max_to_schedule=1):
         }
 
         # Save state progressively
-        state["next_index"] = next_idx
         state["scheduled_slots"] = scheduled_slots
         with open(state_file, "w") as f:
             json.dump(state, f, indent=2)
 
-    print("\nBuffer maintenance pass complete. State updated.")
+    print("\nBuffer maintenance pass complete. State updated with fresh content.")
 
 if __name__ == "__main__":
     count = int(sys.argv[1]) if len(sys.argv) > 1 else 1

@@ -36,7 +36,7 @@ function draw(t) {
     const script = await (await fetch('script.json', { cache: 'no-store' })).json();
     await loadTiming();
     buildCaptions(script);
-    const { shots, cues } = buildShots();
+    const { shots, cues } = buildShots(script);
     shots.sort((a, b) => a.at - b.at);
     OP._shots = shots; OP.script = script;
     OP.duration = () => T.dur;

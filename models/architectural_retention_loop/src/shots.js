@@ -46,7 +46,7 @@ function techTag(label, x, y, color = C.cyan, bg = '#0E1A2B') {
   ctx.restore();
 }
 
-function phoneFrame(cx, cy, scale = 1, batteryPct = 80, isCharging = true) {
+function phoneFrame(cx, cy, scale = 1, batteryPct = 80, isCharging = true, customMetric = '80%') {
   ctx.save();
   ctx.translate(cx, cy);
   ctx.scale(scale, scale);
@@ -85,7 +85,7 @@ function phoneFrame(cx, cy, scale = 1, batteryPct = 80, isCharging = true) {
   ctx.fillStyle = C.white;
   ctx.font = '900 80px Inter';
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillText(`${Math.round(batteryPct)}%`, 0, -20);
+  ctx.fillText(customMetric, 0, -20);
 
   // Lightning bolt if charging
   if (isCharging) {
@@ -100,49 +100,69 @@ function phoneFrame(cx, cy, scale = 1, batteryPct = 80, isCharging = true) {
   ctx.restore();
 }
 
-export function buildShots() {
+export function buildShots(script = {}) {
   const S = [], CUES = [];
   const add = (o) => (S.push(o), o);
   const cue = (t, type, o = {}) => CUES.push({ t: +t.toFixed(3), type, ...o });
   const cut = (i) => (i === 0 ? 0 : L(i) - 0.08);
 
-  // ── Cut 1: Hook (Jump to 80% then crawls) ───────────────────────────
+  const bp = script.blueprint || {};
+
+  function safeWord(word, lineIdx, defaultFraction = 0.45) {
+    try {
+      return Wd(word, lineIdx) - cut(lineIdx);
+    } catch (e) {
+      const dur = (Le(lineIdx) || 3.0) - (L(lineIdx) || 0);
+      return Math.max(0.1, dur * defaultFraction);
+    }
+  }
+
+  // ── Cut 1: Hook (Counter-Intuitive Question / Rapid Jump) ───────────
   {
-    const st = cut(0), t80 = Wd('eighty', 0) - st, tRest = Wd('forty', 0) - st;
+    const st = cut(0), tPoint1 = safeWord('eighty', 0, 0.4), tPoint2 = safeWord('forty', 0, 0.8);
+    const badge = bp.cut1_badge || '[SYSTEM ARCHITECTURE: TECHNICAL X-RAY]';
+    const tag1 = bp.cut1_tag1 || 'STAGE 1: 0-80% IN 20 MIN (HIGH SPEED)';
+    const tag2 = bp.cut1_tag2 || 'STAGE 2: 80-100% IN 40 MIN (THROTTLED)';
+    const metricStr = bp.cut1_metric || '80%';
+
     add({
-      id: 'S01', at: st, cam: [540, 960], note: 'Phone charges to 80% rapidly then crawls',
+      id: 'S01', at: st, cam: [540, 960], note: 'Hook: rapid jump to threshold then throttles',
       draw(lt) {
         ctx.fillStyle = '#080E18'; ctx.fillRect(0, 0, W, H);
         drawGrid(0.15);
         let pct = 0;
-        if (lt < t80) {
-          pct = lerp(0, 80, eo(clamp(lt / (t80 || 1))));
+        if (lt < tPoint1) {
+          pct = lerp(0, 80, eo(clamp(lt / (tPoint1 || 1))));
         } else {
-          pct = 80 + clamp((lt - t80) / (tRest - t80 + 0.1)) * 3; // crawls slowly to 83%
+          pct = 80 + clamp((lt - tPoint1) / (tPoint2 - tPoint1 + 0.1)) * 3;
         }
-        phoneFrame(540, 920, 1.25, pct, true);
-        techTag('[DUAL-STAGE BATTERY ARCHITECTURE]', 540, 280, C.cyan);
-        if (lt > t80) {
-          techTag('STAGE 1: 0-80% IN 20 MIN (HIGH SPEED)', 540, 360, C.cyan);
+        phoneFrame(540, 920, 1.25, pct, true, metricStr);
+        techTag(badge, 540, 280, C.cyan);
+        if (lt > tPoint1) {
+          techTag(tag1, 540, 360, C.cyan);
         }
-        if (lt > tRest) {
-          techTag('STAGE 2: 80-100% IN 40 MIN (THROTTLED)', 540, 440, C.yellow);
+        if (lt > tPoint2) {
+          techTag(tag2, 540, 440, C.yellow);
         }
       }
     });
-    cue(st, 'whoosh'); cue(st + 0.3, 'zip'); cue(st + t80, 'tock');
+    cue(st, 'whoosh'); cue(st + 0.3, 'zip'); cue(st + tPoint1, 'tock');
   }
 
-  // ── Cut 2: The Flawed Myth (Water filling glass) ───────────────────
+  // ── Cut 2: The Flawed Myth (What Most People Assume) ───────────────
   {
-    const st = cut(1), tFlow = Wd('water', 1) - st;
+    const st = cut(1), tFlow = safeWord('water', 1, 0.35);
+    const badge = bp.cut2_badge || '[THE FLAWED MYTH: LINEAR SUPPLY]';
+    const sub = bp.cut2_sub || 'ASSUMPTION: 100% CONSTANT VELOCITY';
+
     add({
-      id: 'S02', at: st, cam: [540, 960], note: 'Myth: linear water filling glass',
+      id: 'S02', at: st, cam: [540, 960], note: 'Myth: linear flow into container',
       draw(lt) {
         ctx.fillStyle = '#0A121F'; ctx.fillRect(0, 0, W, H);
         drawGrid(0.12);
-        techTag('[THE FLAWED MYTH: LINEAR SUPPLY]', 540, 320, C.white);
-        // Beaker / glass
+        techTag(badge, 540, 320, C.white);
+        
+        // Technical Beaker / Container vector
         const bx = 540, by = 980, bw = 320, bh = 540;
         ctx.strokeStyle = '#4A6588'; ctx.lineWidth = 8;
         ctx.beginPath();
@@ -152,41 +172,44 @@ export function buildShots() {
         ctx.lineTo(bx + bw / 2, by - bh / 2);
         ctx.stroke();
 
-        // Water stream pouring down
+        // Linear flow stream
         const fill = clamp(lt / 3.8);
         const wh = bh * fill;
         ctx.fillStyle = '#38B6FF';
         ctx.fillRect(bx - bw / 2 + 8, by + bh / 2 - wh, bw - 16, wh);
 
-        // Pour stream
         if (fill < 0.98) {
           ctx.fillRect(bx - 18, 380, 36, (by + bh / 2 - wh) - 380);
         }
-        techTag('ASSUMPTION: 100% CONSTANT VELOCITY', 540, 1420, '#38B6FF');
+        techTag(sub, 540, 1420, '#38B6FF');
       }
     });
     cue(st, 'whoosh'); cue(st + tFlow, 'bubbles', { dur: 2.0 });
   }
 
-  // ── Cut 3: The Failure Point (Ions Crowding & Overheat) ────────────
+  // ── Cut 3: The Failure Point (Overload / Critical Alert) ───────────
   {
-    const st = cut(2), tCrowd = Wd('crowd', 2) - st, tHeat = Wd('overheat', 2) - st;
+    const st = cut(2), tHeat = safeWord('overheat', 2, 0.45);
+    const badge = bp.cut3_badge || '[CRITICAL FAILURE: SYSTEM OVERLOAD]';
+    const alert = bp.cut3_alert || 'CRITICAL FAILURE POINT';
+    const warning = bp.cut3_warning || 'DANGER: THERMAL RUNAWAY RISK';
+
     add({
-      id: 'S03', at: st, cam: [540, 960], note: 'Ions crowd anode, warning flash and Red X',
+      id: 'S03', at: st, cam: [540, 960], note: 'Failure point: particles saturate, critical alert triggers',
       draw(lt) {
         const isRed = lt > tHeat;
         ctx.fillStyle = isRed ? '#24080B' : '#0B1320'; ctx.fillRect(0, 0, W, H);
         drawGrid(isRed ? 0.25 : 0.12);
-        techTag('[CRITICAL FAILURE: ANODE SATURATION]', 540, 300, C.red);
+        techTag(badge, 540, 300, C.red);
 
-        // Graphite anode grid
+        // Technical Grid Layer
         const gy = 860;
         ctx.strokeStyle = '#4A5B73'; ctx.lineWidth = 4;
         for (let i = -3; i <= 3; i++) {
           line([[240, gy + i * 70], [840, gy + i * 70]], '#4A5B73', 4);
         }
 
-        // Crowding ions
+        // Crowding saturation particles
         const numIons = 30;
         for (let i = 0; i < numIons; i++) {
           const ix = 540 + Math.sin(i * 1.7 + lt * 3) * 260;
@@ -195,31 +218,37 @@ export function buildShots() {
         }
 
         if (lt > tHeat) {
-          techTag('DANGER: THERMAL RUNAWAY RISK', 540, 1340, C.red, '#4A0D14');
-          // Red warning pulses
+          techTag(warning, 540, 1340, C.red, '#4A0D14');
+          // Red warning pulse box
           ctx.strokeStyle = C.red; ctx.lineWidth = 12;
           const pulse = (lt * 8) % 1;
           rr(180 - pulse * 30, gy - 240 - pulse * 30, 720 + pulse * 60, 480 + pulse * 60, 24);
           ctx.stroke();
-          // Red X
-          bigText('CRITICAL OVERHEAT', 540, 860, 72, C.red);
+          // Alert headline
+          bigText(alert, 540, 860, 64, C.red);
         }
       }
     });
     cue(st, 'whoosh'); cue(st + tHeat, 'alarm', { dur: 2.0 }); cue(st + tHeat + 0.3, 'slam');
   }
 
-  // ── Cut 4: The Architectural Secret (Dual-Phase Circuit) ───────────
+  // ── Cut 4: The Architectural Secret (Hidden Engine Revealed) ───────
   {
-    const st = cut(3), tSwitch = Wd('flips', 3) - st;
+    const st = cut(3), tSwitch = safeWord('flips', 3, 0.45);
+    const badge = bp.cut4_badge || '[ARCHITECTURAL SCHEMATIC: PMIC CONTROLLER]';
+    const chipText = bp.cut4_chip || 'DUAL-PHASE';
+    const labelText = bp.cut4_label || 'POWER IC';
+    const mode1 = bp.cut4_mode1 || 'ACTIVE: PHASE 1 (CC MODE)';
+    const mode2 = bp.cut4_mode2 || 'ACTIVE: PHASE 2 (CV MODE)';
+
     add({
-      id: 'S04', at: st, cam: [540, 960], note: 'Dual phase circuit board blueprint',
+      id: 'S04', at: st, cam: [540, 960], note: 'Architectural secret: dual phase controller board',
       draw(lt) {
         ctx.fillStyle = '#06101D'; ctx.fillRect(0, 0, W, H);
         drawGrid(0.2);
-        techTag('[ARCHITECTURAL SCHEMATIC: PMIC CONTROLLER]', 540, 300, C.cyan);
+        techTag(badge, 540, 300, C.cyan);
 
-        // Motherboard chip
+        // Core component block
         const cx = 540, cy = 920, sz = 380;
         ctx.fillStyle = '#102238'; ctx.strokeStyle = C.cyan; ctx.lineWidth = 5;
         rr(cx - sz / 2, cy - sz / 2, sz, sz, 20);
@@ -230,13 +259,13 @@ export function buildShots() {
         rr(cx - 130, cy - 130, 260, 260, 14);
         ctx.fill();
         ctx.fillStyle = C.white; ctx.font = '800 36px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('DUAL-PHASE', cx, cy - 25);
+        ctx.fillText(chipText, cx, cy - 25);
         ctx.fillStyle = C.cyan;
-        ctx.fillText('POWER IC', cx, cy + 25);
+        ctx.fillText(labelText, cx, cy + 25);
 
         // Mode switch indicators
         const isPhase2 = lt > tSwitch;
-        techTag(isPhase2 ? 'ACTIVE: PHASE 2 (CV MODE)' : 'ACTIVE: PHASE 1 (CC MODE)', 540, 1360, isPhase2 ? C.yellow : C.cyan);
+        techTag(isPhase2 ? mode2 : mode1, 540, 1360, isPhase2 ? C.yellow : C.cyan);
 
         // Traces radiating out
         for (let i = 0; i < 8; i++) {
@@ -253,155 +282,175 @@ export function buildShots() {
     cue(st, 'whoosh'); cue(st + tSwitch, 'pop', { gain: 0.8 });
   }
 
-  // ── Cut 5: Dynamics / Flow (Constant Current) ─────────────────────
+  // ── Cut 5: Dynamics / Flow (Data / Energy Vector Highway) ───────────
   {
-    const st = cut(4), tWatts = Wd('forty', 4) - st;
+    const st = cut(4), tPoint = safeWord('forty', 4, 0.4);
+    const badge = bp.cut5_badge || '[DYNAMICS: HIGH-VELOCITY FLUX]';
+    const metricStr = bp.cut5_metric || '40 WATTS CONSTANT CURRENT';
+
     add({
-      id: 'S05', at: st, cam: [540, 960], note: 'Constant current high velocity flow',
+      id: 'S05', at: st, cam: [540, 960], note: 'High velocity energy particles flowing down layers',
       draw(lt) {
         ctx.fillStyle = '#071220'; ctx.fillRect(0, 0, W, H);
-        drawGrid(0.15);
-        techTag('[PHASE 1: 0-80% CONSTANT CURRENT]', 540, 300, C.cyan);
+        drawGrid(0.16);
+        techTag(badge, 540, 300, C.cyan);
 
-        // Large high-speed flow pipes
-        const py = 920, pw = 760, ph = 400;
-        ctx.strokeStyle = '#274468'; ctx.lineWidth = 6;
-        rr(540 - pw / 2, py - ph / 2, pw, ph, 16);
-        ctx.stroke();
+        // Vertical bus channels
+        for (let col = 0; col < 3; col++) {
+          const x = 340 + col * 200;
+          ctx.strokeStyle = '#163152'; ctx.lineWidth = 12;
+          line([[x, 480], [x, 1260]], '#163152', 12);
 
-        // High velocity ion particles racing across
-        for (let i = 0; i < 28; i++) {
-          const speed = 750;
-          const px = ((i * 80 + lt * speed) % pw) + (540 - pw / 2);
-          const row = (i % 5) - 2;
-          circle(px, py + row * 60, 14, C.cyan);
-          // Trail
-          line([[px - 40, py + row * 60], [px, py + row * 60]], C.cyan, 6);
+          // Fast stream particles
+          for (let p = 0; p < 8; p++) {
+            const py = 480 + ((lt * 1200 + p * 110) % 780);
+            circle(x, py, 14, C.cyan);
+            // Particle glow tail
+            line([[x, py], [x, Math.max(480, py - 40)]], C.cyan, 6);
+          }
         }
 
-        techTag('RATE: 45W MAXIMUM FLOW SPEED', 540, 1360, C.cyan);
+        techTag(metricStr, 540, 1380, C.cyan);
       }
     });
-    cue(st, 'whoosh'); cue(st + 0.2, 'zip');
+    cue(st, 'whoosh'); cue(st + tPoint, 'laser');
   }
 
-  // ── Cut 6: Self-Balancing Loop (Thermal Feedback Governor) ─────────
+  // ── Cut 6: Self-Balancing Loop (Feedback Governor Step-Down) ───────
   {
-    const st = cut(5), tDrop = Wd('steps', 5) - st;
+    const st = cut(5), tStep = safeWord('thermal', 5, 0.45);
+    const badge = bp.cut6_badge || '[CLOSED-LOOP FEEDBACK GOVERNOR]';
+    const tag1 = bp.cut6_tag || 'THERMAL FEEDBACK GOVERNOR ACTIVE';
+
     add({
-      id: 'S06', at: st, cam: [540, 960], note: 'Governor steps down wattage curve',
+      id: 'S06', at: st, cam: [540, 960], note: 'Governor steps down power as resistance rises',
       draw(lt) {
-        ctx.fillStyle = '#081424'; ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#091424'; ctx.fillRect(0, 0, W, H);
         drawGrid(0.18);
-        techTag('[PHASE 2: CLOSED-LOOP THERMAL THROTTLING]', 540, 300, C.yellow);
+        techTag(badge, 540, 300, C.yellow);
 
-        // Step-down graph
-        const gx = 220, gy = 1100, gw = 640, gh = 420;
-        // Axes
-        line([[gx, gy - gh], [gx, gy], [gx + gw, gy]], '#476385', 5);
+        // Circular feedback gauge
+        const cx = 540, cy = 840, r = 220;
+        ctx.strokeStyle = '#1D3B5C'; ctx.lineWidth = 16;
+        circle(cx, cy, r, '#0A1828'); ctx.stroke();
 
-        // Power curve steps down
-        const progress = clamp(lt / 3.5);
-        ctx.strokeStyle = C.yellow; ctx.lineWidth = 8;
+        const stepped = lt > tStep;
+        const progress = stepped ? 0.35 : 0.88;
+        ctx.strokeStyle = stepped ? C.yellow : C.cyan;
+        ctx.lineWidth = 20; ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.moveTo(gx, gy - gh * 0.85); // 45W
-        ctx.lineTo(gx + gw * 0.4, gy - gh * 0.85); // 0-80%
-        // Step down
-        ctx.lineTo(gx + gw * 0.65, gy - gh * 0.45); // down to 20W
-        ctx.lineTo(gx + gw * 0.95, gy - gh * 0.15); // down to 5W trickle
+        ctx.arc(cx, cy, r, -Math.PI, -Math.PI + Math.PI * progress);
         ctx.stroke();
 
-        // Tracker dot
-        const dotX = gx + gw * progress;
-        let dotY = gy - gh * 0.85;
-        if (progress > 0.4 && progress <= 0.65) dotY = lerp(gy - gh * 0.85, gy - gh * 0.45, (progress - 0.4) / 0.25);
-        else if (progress > 0.65) dotY = lerp(gy - gh * 0.45, gy - gh * 0.15, (progress - 0.65) / 0.3);
-        circle(dotX, dotY, 18, C.white);
+        ctx.fillStyle = C.white; ctx.font = '900 72px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(stepped ? '15W' : '45W', cx, cy - 20);
+        ctx.fillStyle = stepped ? C.yellow : C.cyan; ctx.font = '700 32px Inter';
+        ctx.fillText(stepped ? 'THROTTLED' : 'MAX POWER', cx, cy + 40);
 
-        const currentWatts = progress < 0.4 ? '45W' : progress < 0.65 ? '20W' : '5W';
-        techTag(`POWER OUTPUT: ${currentWatts} (AUTO-BALANCED)`, 540, 1380, C.yellow);
+        techTag(tag1, 540, 1260, stepped ? C.yellow : C.cyan);
+        techTag(stepped ? 'OUTPUT: STEP-DOWN COMPLETED' : 'MONITORING IMPEDANCE...', 540, 1340, C.white);
       }
     });
-    cue(st, 'whoosh'); cue(st + tDrop, 'tock');
+    cue(st, 'whoosh'); cue(st + tStep, 'tock');
   }
 
-  // ── Cut 7: Engine X-Ray (60Hz Microcontroller Sensor) ──────────────
+  // ── Cut 7: Engine X-Ray (Micro-Controller Radar & Telemetry) ────────
   {
-    const st = cut(6), tSixty = Wd('sixty', 6) - st;
+    const st = cut(6), tSixty = safeWord('sixty', 6, 0.45);
+    const badge = bp.cut7_badge || '[MICRO-CONTROLLER SENSING GRID]';
+    const freqStr = bp.cut7_freq || 'FREQUENCY: 60 CYCLES / SEC';
+    const tempStr = bp.cut7_temp || 'THERMAL LIMIT: 38.4°C [STABLE]';
+
     add({
-      id: 'S07', at: st, cam: [540, 960], note: 'Microcontroller pulses at 60Hz',
+      id: 'S07', at: st, cam: [540, 960], note: 'High frequency telemetry sensor radar',
       draw(lt) {
-        ctx.fillStyle = '#05101E'; ctx.fillRect(0, 0, W, H);
-        drawGrid(0.2);
-        techTag('[INTERNAL HARDWARE: THERMAL SENSOR IC]', 540, 300, C.cyan);
+        ctx.fillStyle = '#050D18'; ctx.fillRect(0, 0, W, H);
+        drawGrid(0.22);
+        techTag(badge, 540, 300, C.cyan);
 
-        // Central sensor eye
-        const cx = 540, cy = 920;
-        circle(cx, cy, 90, '#102B47');
-        circle(cx, cy, 60, '#1D4A78');
-        circle(cx, cy, 30, C.cyan);
-
-        // 60Hz pulse waves radiating outward
-        for (let i = 0; i < 4; i++) {
-          const r = ((lt * 3 + i * 0.6) % 2.4) * 160;
-          ctx.strokeStyle = C.cyan; ctx.lineWidth = 4;
-          ctx.globalAlpha = Math.max(0, 1 - r / 380);
-          circle(cx, cy, r, 'transparent');
-          ctx.stroke();
+        const cx = 540, cy = 840, maxR = 260;
+        // Concentric radar sensor rings
+        for (let i = 1; i <= 4; i++) {
+          const r = (maxR / 4) * i;
+          ctx.strokeStyle = '#14314E'; ctx.lineWidth = 3;
+          circle(cx, cy, r); ctx.stroke();
         }
-        ctx.globalAlpha = 1.0;
 
-        // HUD telemetry readouts
-        techTag('FREQUENCY: 60 CYCLES / SEC', 540, 1340, C.cyan);
-        techTag('THERMAL LIMIT: 38.4°C [STABLE]', 540, 1420, C.white);
+        // Radar sweep arm
+        const ang = (lt * 5) % (Math.PI * 2);
+        ctx.strokeStyle = C.cyan; ctx.lineWidth = 4;
+        line([[cx, cy], [cx + Math.cos(ang) * maxR, cy + Math.sin(ang) * maxR]], C.cyan, 4);
+
+        // Blips
+        for (let b = 0; b < 6; b++) {
+          const ban = (b * 1.05);
+          const br = 90 + (b * 26);
+          const bx = cx + Math.cos(ban) * br;
+          const by = cy + Math.sin(ban) * br;
+          circle(bx, by, 7, C.cyan);
+          ctx.strokeStyle = C.cyan; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(bx, by, 14, 0, Math.PI * 2); ctx.stroke();
+        }
+
+        techTag(freqStr, 540, 1340, C.cyan);
+        techTag(tempStr, 540, 1420, C.white);
       }
     });
     cue(st, 'whoosh'); cue(st + tSixty, 'pop');
   }
 
-  // ── Cut 8: Efficiency Metric (90% Capacity Across 800 Cycles) ──────
+  // ── Cut 8: Efficiency Metric (Core Macro Leverage Point) ────────────
   {
-    const st = cut(7), tCycles = Wd('hundred', 7) - st;
+    const st = cut(7), tCycles = safeWord('hundred', 7, 0.45);
+    const badge = bp.cut8_badge || '[CORE EFFICIENCY METRIC]';
+    const metricStr = bp.cut8_metric || '90%';
+    const labelStr = bp.cut8_label || 'HEALTH PRESERVED';
+    const lifespanStr = bp.cut8_lifespan || 'LIFESPAN: 800+ RECHARGE CYCLES';
+
     add({
-      id: 'S08', at: st, cam: [540, 960], note: '90% health metric badge',
+      id: 'S08', at: st, cam: [540, 960], note: 'Core efficiency metric gauge',
       draw(lt) {
         ctx.fillStyle = '#071322'; ctx.fillRect(0, 0, W, H);
         drawGrid(0.15);
-        techTag('[CORE EFFICIENCY METRIC]', 540, 320, C.cyan);
+        techTag(badge, 540, 320, C.cyan);
 
         // Giant metric circle badge
         const cx = 540, cy = 880, r = 240;
         ctx.strokeStyle = '#27476E'; ctx.lineWidth = 14;
         circle(cx, cy, r, '#0D2036'); ctx.stroke();
 
-        // 90% arc
+        // Metric arc
         ctx.strokeStyle = '#10B981'; ctx.lineWidth = 18; ctx.lineCap = 'round';
         ctx.beginPath();
         ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * 0.9);
         ctx.stroke();
 
         ctx.fillStyle = C.white; ctx.font = '900 120px Inter'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('90%', cx, cy - 30);
+        ctx.fillText(metricStr, cx, cy - 30);
         ctx.fillStyle = '#10B981'; ctx.font = '700 38px Inter';
-        ctx.fillText('HEALTH PRESERVED', cx, cy + 50);
+        ctx.fillText(labelStr, cx, cy + 50);
 
-        techTag('LIFESPAN: 800+ RECHARGE CYCLES', 540, 1360, '#10B981');
+        techTag(lifespanStr, 540, 1360, '#10B981');
       }
     });
     cue(st, 'whoosh'); cue(st + tCycles, 'tock');
   }
 
-  // ── Cut 9: Loop Outro (Seamless Loop back to Hook) ─────────────────
+  // ── Cut 9: Loop Outro (Seamless Return to Opening Hook) ─────────────
   {
-    const st = cut(8), tFire = Wd('fire', 8) - st;
+    const st = cut(8), tFire = safeWord('fire', 8, 0.45);
+    const badge = bp.cut9_badge || '[SYSTEM VERDICT: HARDWARE PROTECTION]';
+    const tag1 = bp.cut9_tag1 || 'ACTIVE GOVERNOR SHIELD';
+    const tag2 = bp.cut9_tag2 || 'PREVENTS DAMAGE • PROTECTS SYSTEM';
+
     add({
-      id: 'S09', at: st, cam: [540, 960], note: 'Outro phone with glowing shield, loops to hook',
+      id: 'S09', at: st, cam: [540, 960], note: 'Protective shield vector loops seamlessly to opening hook',
       draw(lt) {
         ctx.fillStyle = '#060F1C'; ctx.fillRect(0, 0, W, H);
         drawGrid(0.18);
-        techTag('[SYSTEM VERDICT: HARDWARE PROTECTION]', 540, 300, '#10B981');
+        techTag(badge, 540, 300, '#10B981');
 
-        phoneFrame(540, 920, 1.25, 80, true);
+        phoneFrame(540, 920, 1.25, 80, true, bp.cut1_metric || '80%');
 
         // Green protective shield outline
         const sp = Math.sin(lt * 6) * 10;
@@ -409,8 +458,8 @@ export function buildShots() {
         rr(540 - 270 - sp / 2, 920 - 470 - sp / 2, 540 + sp, 940 + sp, 55);
         ctx.stroke();
 
-        techTag('ACTIVE THERMAL GOVERNOR', 540, 1360, '#10B981');
-        techTag('PREVENTS OVERHEAT • PROTECTS LIFE', 540, 1440, C.white);
+        techTag(tag1, 540, 1360, '#10B981');
+        techTag(tag2, 540, 1440, C.white);
       }
     });
     cue(st, 'whoosh'); cue(st + tFire, 'thud');
