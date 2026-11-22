@@ -10,17 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 SKILL_DIR = ROOT / "faceless-shorts"
 AUTOMATION_DIR = ROOT / "automation"
 PIPELINE_DIR = AUTOMATION_DIR / "pipeline"
-
-# US Eastern Time (UTC-5 in standard, UTC-4 in daylight saving)
-# Peak viewing hours in UTC:
-# Weekdays:
-# Slot 1: 8:30 AM EST -> 13:30 UTC
-# Slot 2: 1:00 PM EST -> 18:00 UTC
-# Slot 3: 7:00 PM EST -> 23:00 UTC
-# Weekends (Sat/Sun):
-# Slot 1: 10:00 AM EST -> 15:00 UTC
-# Slot 2: 2:30 PM EST -> 19:30 UTC
-# Slot 3: 8:00 PM EST -> 00:30 UTC (next day)
+MODEL_DIR = ROOT / "models" / "architectural_retention_loop"
 
 def run_cmd(cmd, cwd=None):
     print(f"Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
@@ -63,15 +53,14 @@ def get_target_slots(now_utc=None):
     return slots
 
 def build_short(topic, output_mp4):
-    style = topic["style"]
-    example_dir = SKILL_DIR / "styles" / style / "example"
     proj_dir = ROOT / "runs" / f"run_{topic['id']}"
 
     if proj_dir.exists():
         shutil.rmtree(proj_dir)
 
-    shutil.copytree(example_dir, proj_dir)
-    print(f"\n[BUILD] Building '{topic['title']}' using style '{style}' at {proj_dir}")
+    # Use the new 9-Cut Architectural Retention Loop Model
+    shutil.copytree(MODEL_DIR, proj_dir)
+    print(f"\n[BUILD] Building '{topic['title']}' using 9-Cut Architectural Model at {proj_dir}")
 
     py_bin = sys.executable
     voice_py = SKILL_DIR / "scripts" / "voice.py"
@@ -97,9 +86,8 @@ def build_short(topic, output_mp4):
     # Step 5: Render video via Headless Chrome with audio merged
     output_mp4.parent.mkdir(parents=True, exist_ok=True)
     print("5. Rendering final MP4 via Chrome and FFmpeg (optimized fast preset)...")
-    # Using --draft flag renders crisp 30fps video in 2-4 minutes instead of 1 hour
     run_cmd(["node", "tools/capture.mjs", "video", str(output_mp4), "--draft"], cwd=proj_dir)
-    print(f"SUCCESS: Rendered video with voice: {output_mp4} ({output_mp4.stat().st_size} bytes)")
+    print(f"SUCCESS: Rendered architectural short: {output_mp4} ({output_mp4.stat().st_size} bytes)")
 
 def maintain_schedule_buffer(max_to_schedule=1):
     topics_file = PIPELINE_DIR / "topics.json"
@@ -139,14 +127,14 @@ def maintain_schedule_buffer(max_to_schedule=1):
     from uploader import upload_to_youtube, upload_to_facebook_reel
 
     slots_to_process = unfilled_slots[:max_to_schedule]
-    print(f"Scheduling {len(slots_to_process)} slot(s) in this runner pass...")
+    print(f"Scheduling {len(slots_to_process)} slot(s) using Architectural Retention Loop...")
 
     for slot in slots_to_process:
         topic = topics[next_idx % len(topics)]
         next_idx += 1
 
         print(f"\n--- Scheduling Slot: {slot['id']} ({slot['iso']}) ---")
-        print(f"Topic: {topic['title']} ({topic['style']})")
+        print(f"Topic: {topic['title']}")
 
         video_file = ROOT / "renders" / f"{slot['id']}.mp4"
         build_short(topic, video_file)
@@ -169,7 +157,7 @@ def maintain_schedule_buffer(max_to_schedule=1):
         scheduled_slots[slot["id"]] = {
             "topic_id": topic["id"],
             "title": topic["title"],
-            "style": topic["style"],
+            "style": "architectural-2d-loop",
             "publish_at": slot["iso"],
             "youtube_id": yt_id,
             "facebook_id": fb_id,
