@@ -1,0 +1,60 @@
+{
+  "title": "Why Fast Charging Stops at 80%",
+  "voice": "am_michael",
+  "speed": 1.10,
+  "lead": 0.35,
+  "outro": 0.65,
+  "gap": 0.22,
+  "music": "bed",
+  "sources": [
+    "Battery University (BU-409: Charging Lithium-ion)",
+    "IEEE Transactions on Power Electronics"
+  ],
+  "lines": [
+    {
+      "text": "Why does your phone charge to eighty percent in twenty minutes, but takes forty minutes for the rest?",
+      "caps": "WHY SLOW DOWN | AFTER EIGHTY *PERCENT?",
+      "gap": 0.22
+    },
+    {
+      "text": "Most people think power flows like water into a glass at a steady rate.",
+      "caps": "FLOWS LIKE *WATER | AT STEADY *RATE?",
+      "gap": 0.22
+    },
+    {
+      "text": "Do that past eighty, and lithium ions crowd the anode, overheat, and swell.",
+      "caps": "IONS *CROWD | ANODE *OVERHEATS!",
+      "gap": 0.24
+    },
+    {
+      "text": "Inside, your phone uses a dual-phase circuit that flips operating modes.",
+      "caps": "DUAL-PHASE *CIRCUIT | FLIPS *MODES",
+      "gap": 0.22
+    },
+    {
+      "text": "Under eighty, constant current drives forty watts directly into open graphite layers.",
+      "caps": "CONSTANT *CURRENT | FORTY *WATTS",
+      "gap": 0.22
+    },
+    {
+      "text": "As resistance spikes, a thermal feedback loop steps down the wattage.",
+      "caps": "THERMAL *LOOP | DROPS *WATTS",
+      "gap": 0.24
+    },
+    {
+      "text": "This micro-controller samples cell temperature sixty times every second.",
+      "caps": "MICRO *CONTROLLER | SIXTY TIMES A *SECOND",
+      "gap": 0.22
+    },
+    {
+      "text": "That thermal gate preserves ninety percent capacity across eight hundred cycles.",
+      "caps": "NINETY PERCENT *HEALTH | EIGHT HUNDRED *CYCLES",
+      "gap": 0.24
+    },
+    {
+      "text": "So it's not slowing down to test your patience: it's keeping your phone from catching fire.",
+      "caps": "PREVENTS *FIRE | NOT YOUR *PATIENCE",
+      "gap": 0.35
+    }
+  ]
+}

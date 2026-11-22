@@ -1,0 +1,61 @@
+{
+ "duration": 45.45,
+ "voice": "am_michael",
+ "speed": 1.1,
+ "lines": [
+  {
+   "i": 0,
+   "text": "Why does your phone charge to eighty percent in twenty minutes, but takes forty minutes for the rest?",
+   "start": 0.35,
+   "end": 5.627
+  },
+  {
+   "i": 1,
+   "text": "Most people think power flows like water into a glass at a steady rate.",
+   "start": 5.847,
+   "end": 10.013
+  },
+  {
+   "i": 2,
+   "text": "Do that past eighty, and lithium ions crowd the anode, overheat, and swell.",
+   "start": 10.233,
+   "end": 14.676
+  },
+  {
+   "i": 3,
+   "text": "Inside, your phone uses a dual-phase circuit that flips operating modes.",
+   "start": 14.916,
+   "end": 19.436
+  },
+  {
+   "i": 4,
+   "text": "Under eighty, constant current drives forty watts directly into open graphite layers.",
+   "start": 19.656,
+   "end": 24.985
+  },
+  {
+   "i": 5,
+   "text": "As resistance spikes, a thermal feedback loop steps down the wattage.",
+   "start": 25.205,
+   "end": 29.34
+  },
+  {
+   "i": 6,
+   "text": "This micro-controller samples cell temperature sixty times every second.",
+   "start": 29.58,
+   "end": 34.063
+  },
+  {
+   "i": 7,
+   "text": "That thermal gate preserves ninety percent capacity across eight hundred cycles.",
+   "start": 34.283,
+   "end": 39.121
+  },
+  {
+   "i": 8,
+   "text": "So it's not slowing down to test your patience: it's keeping your phone from catching fire.",
+   "start": 39.361,
+   "end": 44.45
+  }
+ ]
+}
