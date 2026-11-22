@@ -125,6 +125,7 @@ def maintain_schedule_buffer(max_to_schedule=1):
         return
 
     from uploader import upload_to_youtube, upload_to_facebook_reel
+    from thumb_generator import generate_thumbnail
 
     slots_to_process = unfilled_slots[:max_to_schedule]
     print(f"Scheduling {len(slots_to_process)} slot(s) using Architectural Retention Loop...")
@@ -137,7 +138,15 @@ def maintain_schedule_buffer(max_to_schedule=1):
         print(f"Topic: {topic['title']}")
 
         video_file = ROOT / "renders" / f"{slot['id']}.mp4"
+        thumb_file = ROOT / "renders" / f"{slot['id']}_thumb.jpg"
         build_short(topic, video_file)
+
+        # Generate automated high-CTR thumbnail from video content
+        print(f"Generating automated thumbnail from video content for {slot['id']}...")
+        try:
+            generate_thumbnail(video_file, topic, thumb_file, peak_sec=12.0)
+        except Exception as e:
+            print(f"Notice: Thumbnail generation fallback: {e}")
 
         # Upload and schedule on YouTube
         yt_id = upload_to_youtube(
@@ -145,7 +154,8 @@ def maintain_schedule_buffer(max_to_schedule=1):
             topic["title"],
             topic["hook"],
             topic.get("tags", []),
-            publish_at_iso=slot["iso"]
+            publish_at_iso=slot["iso"],
+            thumbnail_path=str(thumb_file) if thumb_file.exists() else None
         )
 
         fb_id = upload_to_facebook_reel(
@@ -161,6 +171,7 @@ def maintain_schedule_buffer(max_to_schedule=1):
             "publish_at": slot["iso"],
             "youtube_id": yt_id,
             "facebook_id": fb_id,
+            "thumbnail": str(thumb_file) if thumb_file.exists() else None,
             "scheduled_at": datetime.now(timezone.utc).isoformat()
         }
 

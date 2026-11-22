@@ -7,7 +7,7 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-def upload_to_youtube(video_path, title, description, tags, publish_at_iso=None):
+def upload_to_youtube(video_path, title, description, tags, publish_at_iso=None, thumbnail_path=None):
     schedule_text = f" (Scheduled for: {publish_at_iso})" if publish_at_iso else " (Publish immediately)"
     print(f"Uploading to YouTube: {title}{schedule_text}")
     
@@ -76,6 +76,20 @@ def upload_to_youtube(video_path, title, description, tags, publish_at_iso=None)
 
     video_id = response.get("id")
     print(f"SUCCESS: Uploaded YouTube Short! Video ID: {video_id} - Scheduled: {publish_at_iso or 'Immediate'}")
+
+    # Set custom thumbnail if provided
+    if thumbnail_path and os.path.exists(thumbnail_path):
+        print(f"Applying custom high-CTR thumbnail: {thumbnail_path}")
+        try:
+            thumb_media = MediaFileUpload(thumbnail_path, mimetype="image/jpeg")
+            youtube.thumbnails().set(
+                videoId=video_id,
+                media_body=thumb_media
+            ).execute()
+            print(f"SUCCESS: Custom thumbnail uploaded to YouTube for {video_id}!")
+        except Exception as e:
+            print(f"Thumbnail upload notice (requires phone verification on channel): {e}")
+
     return video_id
 
 def upload_to_facebook_reel(video_path, title, description):
@@ -89,7 +103,6 @@ def upload_to_facebook_reel(video_path, title, description):
     print(f"Uploading to Facebook Reels (Page ID: {page_id})...")
     
     try:
-        # 1. Initialize Reel upload session
         init_url = f"https://graph.facebook.com/v19.0/{page_id}/video_reels"
         init_res = requests.post(init_url, data={
             "upload_phase": "start",
@@ -102,7 +115,6 @@ def upload_to_facebook_reel(video_path, title, description):
             print(f"Failed to start FB Reel session: {init_res}")
             return None
 
-        # 2. Upload video binary
         file_size = os.path.getsize(video_path)
         with open(video_path, "rb") as f:
             headers = {
@@ -112,7 +124,6 @@ def upload_to_facebook_reel(video_path, title, description):
             }
             upload_res = requests.post(upload_url, headers=headers, data=f).json()
 
-        # 3. Publish Reel
         publish_res = requests.post(init_url, data={
             "upload_phase": "finish",
             "access_token": access_token,
@@ -129,14 +140,15 @@ def upload_to_facebook_reel(video_path, title, description):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python uploader.py <video_path> [title] [description] [publish_at_iso]")
+        print("Usage: python uploader.py <video_path> [title] [description] [publish_at_iso] [thumb_path]")
         sys.exit(1)
         
     vid = sys.argv[1]
     tit = sys.argv[2] if len(sys.argv) > 2 else "What Happens If? #shorts"
     desc = sys.argv[3] if len(sys.argv) > 3 else "Crazy science facts you need to know."
     pub_iso = sys.argv[4] if len(sys.argv) > 4 else None
+    thumb = sys.argv[5] if len(sys.argv) > 5 else None
     tags = ["facts", "science", "curiosity"]
     
-    upload_to_youtube(vid, tit, desc, tags, publish_at_iso=pub_iso)
+    upload_to_youtube(vid, tit, desc, tags, publish_at_iso=pub_iso, thumbnail_path=thumb)
     upload_to_facebook_reel(vid, tit, desc)
